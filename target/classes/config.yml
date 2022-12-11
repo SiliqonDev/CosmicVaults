@@ -1,0 +1,12 @@
+database:
+  host: 127.0.0.1
+  port: 3306
+  username: username
+  password: pass
+  database: db_name
+
+prefix: "&a[&b&lExample&a] &r"
+
+no-permission: "&cYou do not have permission to use this command."
+must-be-player: "&cYou must be a player to use this command."
+no-vaults: "&cYou do not have any vaults."

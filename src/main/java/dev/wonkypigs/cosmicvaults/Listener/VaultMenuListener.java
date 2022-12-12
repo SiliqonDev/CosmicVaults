@@ -1,5 +1,6 @@
 package dev.wonkypigs.cosmicvaults.Listener;
 
+import dev.wonkypigs.cosmicvaults.CosmicVaults;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,9 +14,11 @@ import org.bukkit.inventory.Inventory;
 
 public class VaultMenuListener implements Listener {
 
+    private static final CosmicVaults plugin = CosmicVaults.getInstance();
+
     @EventHandler
     public void onMenuClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().contains("&d&lY&5&lo&d&lu&5&lr &d&lV&5&la&d&lu&5&ll&d&lt&5&ls&r | Page ".replace("&", "§"))) {
+        if (e.getView().getTitle().contains(plugin.getConfigValue("vault-menu-title").replace("&", "§"))) {
             e.setCancelled(true);
             if (e.getCurrentItem() != null) {
                 String title = e.getView().getTitle();
@@ -33,7 +36,7 @@ public class VaultMenuListener implements Listener {
                 else if (e.getCurrentItem().getType() == Material.DIAMOND) {
                     VaultHandler.createNewVault(player, currpage);
                 }
-                else if (e.getCurrentItem().getType() == Material.ENDER_CHEST) {
+                else if (e.getCurrentItem().getType() == Material.getMaterial(plugin.getConfigValue("vault-item"))) {
                     currpage--;
                     VaultHandler.openVault(player, (e.getSlot()-8) + currpage*27);
                 }

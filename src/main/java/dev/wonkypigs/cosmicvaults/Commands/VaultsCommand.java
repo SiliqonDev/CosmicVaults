@@ -27,16 +27,20 @@ public class VaultsCommand implements CommandExecutor {
                 // Open main vaults menu
                 vaultMenuFiller(1, player);
             } else {
-                player.sendMessage(plugin.getConfigValue("no-permission"));
+                player.sendMessage(plugin.getConfigValue("no-permission")
+                        .replace("{prefix}", plugin.getConfigValue("prefix"))
+                        .replace("&", "§"));
             }
         } else {
-            sender.sendMessage(plugin.getConfigValue("must-be-player"));
+            sender.sendMessage(plugin.getConfigValue("must-be-player")
+                    .replace("{prefix}", plugin.getConfigValue("prefix"))
+                    .replace("&", "§"));
         }
         return true;
     }
 
     public static void vaultMenuFiller(int page, Player player) {
-        Inventory inv = plugin.getServer().createInventory(null, 45, "&d&lY&5&lo&d&lu&5&lr &d&lV&5&la&d&lu&5&ll&d&lt&5&ls&r | Page ".replace("&", "§") + page);
+        Inventory inv = plugin.getServer().createInventory(null, 45, plugin.getConfigValue("vault-menu-title").replace("&", "§") + "&r | Page ".replace("&", "§") + page);
         final int currpage = page - 1;
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
@@ -77,7 +81,7 @@ public class VaultsCommand implements CommandExecutor {
                 if (total_items == 0) {
                     ItemStack item = new ItemStack(Material.BARRIER);
                     ItemMeta meta = item.getItemMeta();
-                    meta.setDisplayName("&cYou have no vaults!".replace("&", "§"));
+                    meta.setDisplayName(plugin.getConfigValue("no-vaults-item").replace("&", "§"));
                     item.setItemMeta(meta);
                     inv.setItem(22, item);
                     // get out of scheduler
@@ -115,9 +119,11 @@ public class VaultsCommand implements CommandExecutor {
                         continue;
                     }
                     int vaultId = results.getInt("VAULT_ID");
-                    ItemStack vaultItem = new ItemStack(Material.ENDER_CHEST, 1);
+                    ItemStack vaultItem = new ItemStack(Material.getMaterial(plugin.getConfigValue("vault-item")), 1);
                     ItemMeta vaultItemMeta = vaultItem.getItemMeta();
-                    vaultItemMeta.setDisplayName("&6&lVault ".replace("&", "§") + vaultId);
+                    vaultItemMeta.setDisplayName(plugin.getConfigValue("vault-item-name")
+                            .replace("{vault_number}", String.valueOf(vaultId))
+                            .replace("&", "§"));
                     vaultItemMeta.setLore(null);
                     vaultItem.setItemMeta(vaultItemMeta);
                     inv.addItem(vaultItem);

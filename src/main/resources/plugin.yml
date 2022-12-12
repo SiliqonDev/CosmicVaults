@@ -4,11 +4,9 @@ main: dev.wonkypigs.cosmicvaults.CosmicVaults
 api-version: 1.19
 prefix: CosmicVaults
 authors: [ WonkyPigs ]
-description: A simple plugin to make player vaults
-website: wonkypigs.dev
+description: A plugin that handles private player vaults.
 commands:
   vaults:
-    permission: cosmicvaults.vaults
     description: View your vaults
     usage: /vaults
     aliases: [vaultsmenu, v]

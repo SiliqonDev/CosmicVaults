@@ -1,12 +1,38 @@
+##############################
+########## MESSAGES ##########
+##############################
+
+prefix: "&7[&dCosmic&5Vaults&7]&r"
+
+no-permission: "{prefix} &cYou do not have permission to use this command." # player doesnt have permissions to use command
+must-be-player: "{prefix} &cYou must be a player to use this command." # Console tryna do stuff
+no-vaults-item: "&cYou do not have any vaults." # Player has no vaults
+max-vaults-reached: "{prefix} &cYou have reached the maximum amount of vaults. &7(&c{vaults}&7)" # Player has max vaults
+
+##############################
+####### VAULT SETTINGS #######
+##############################
+
+default-vaults: 1 # The amount of vaults a player will have by default
+
+# Players with permission cosmicvaults.vaults.{number} will have {number} vaults
+# Players with permission cosmicvaults.vaults.unlimited will have unlimited vaults
+
+vault-menu-title: "&dCosmic&5Vaults" # The title of the vault menu
+
+vault-item: "ENDER_CHEST" # Item used in vaults menu to represent a vault
+vault-item-name: "&b&lVault &7(&6{vault_number}&7)" # Name of the vault item
+
+vault-storage-rows: 3 # MAX: 6 | MIN: 1
+vault-storage-title: "&9&lVault &7(&9&l{vault_number}&7)" # Title of the vault storage page
+
+##############################
+########## DATABASE ##########
+##############################
+
 database:
   host: 127.0.0.1
   port: 3306
   username: username
   password: pass
   database: db_name
-
-prefix: "&a[&b&lExample&a] &r"
-
-no-permission: "&cYou do not have permission to use this command."
-must-be-player: "&cYou must be a player to use this command."
-no-vaults: "&cYou do not have any vaults."

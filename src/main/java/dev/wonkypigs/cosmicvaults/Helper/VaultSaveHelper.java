@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class VaultSaveHelper {
+
     public static ByteArrayInputStream serializeItemsArray(ItemStack[] items) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);

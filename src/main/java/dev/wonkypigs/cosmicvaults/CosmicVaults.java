@@ -5,6 +5,7 @@ import dev.wonkypigs.cosmicvaults.Handlers.VaultHandler;
 import dev.wonkypigs.cosmicvaults.Listener.VaultMenuListener;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -91,5 +92,11 @@ public final class CosmicVaults extends JavaPlugin {
     public String getConfigValue(String key) {
         String ans = getConfig().getString(key);
         return ChatColor.translateAlternateColorCodes('&', ans);
+    }
+
+    // register permissions
+    public void registerPermissions() {
+        getServer().getPluginManager().addPermission(new Permission("cosmicvaults.vaults"));
+        getServer().getPluginManager().addPermission(new Permission("cosmicvaults.vaults.unlimited"));
     }
 }

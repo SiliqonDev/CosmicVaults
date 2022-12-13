@@ -26,6 +26,7 @@ public final class CosmicVaults extends JavaPlugin {
         saveDefaultConfig();
         registerCommands();
         registerListeners();
+        registerPermissions();
         mySqlSetup();
         getLogger().info("CosmicVaults has been enabled successfully!");
     }

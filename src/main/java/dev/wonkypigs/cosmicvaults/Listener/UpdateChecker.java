@@ -16,7 +16,7 @@ public class UpdateChecker implements Listener {
     private static final CosmicVaults plugin = CosmicVaults.getInstance();
 
     private String url = "https://api.spigotmc.org/legacy/update.php?resource=";
-    private String id = "resourceId";
+    private String id = "106729";
 
     private boolean isAvailable;
     private String remoteVersion;
@@ -32,8 +32,10 @@ public class UpdateChecker implements Listener {
     @EventHandler
     public void on(PlayerJoinEvent event) {
         if(plugin.getConfig().getBoolean("update-checker")) {
-            if (isAvailable()) {
-                event.getPlayer().sendMessage("&cThere is a new update available for CosmicVaults!\n&cCurrent version: " + plugin.getDescription().getVersion() + "\n&cNew version: " + remoteVersion);
+            if (event.getPlayer().isOp()) {
+                if (isAvailable()) {
+                    event.getPlayer().sendMessage("&cThere is a new update available for CosmicVaults!\n&cCurrent version: " + plugin.getDescription().getVersion() + "\n&cNew version: " + remoteVersion);
+                }
             }
         }
     }

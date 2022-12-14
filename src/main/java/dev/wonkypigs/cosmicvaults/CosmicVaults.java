@@ -54,6 +54,7 @@ public final class CosmicVaults extends JavaPlugin {
         // Registering all plugin listeners
         getServer().getPluginManager().registerEvents(new VaultHandler(), this);
         getServer().getPluginManager().registerEvents(new VaultMenuListener(), this);
+        getServer().getPluginManager().registerEvents(new UpdateChecker(), this);
     }
 
     public void registerPermissions() {

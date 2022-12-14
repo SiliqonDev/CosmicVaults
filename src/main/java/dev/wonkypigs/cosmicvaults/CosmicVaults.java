@@ -45,6 +45,12 @@ public final class CosmicVaults extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VaultMenuListener(), this);
     }
 
+    public void registerPermissions() {
+        // Registering all plugin permissions
+        getServer().getPluginManager().addPermission(new Permission("cosmicvaults.vaults"));
+        getServer().getPluginManager().addPermission(new Permission("cosmicvaults.vaults.unlimited"));
+    }
+
     public void mySqlSetup() {
         try {
             File file = new File(getDataFolder(), "config.yml");
@@ -65,9 +71,12 @@ public final class CosmicVaults extends JavaPlugin {
                 }
 
                 Class.forName("com.mysql.cj.jdbc.Driver");
+                // create database if not exists
+                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "?autoReconnect=true&useSSL=false", username, password));
+                getConnection().createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS " + database);
                 setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password));
 
-                getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS cosmicVaults_vaults (UUID varchar(50), VAULT_ID int, CONTENTS BLOB)").executeUpdate();
+                getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_vaults (UUID varchar(50), VAULT_ID int, CONTENTS BLOB)").executeUpdate();
                 getLogger().info("Successfully connected to the MySQL database");
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -93,11 +102,5 @@ public final class CosmicVaults extends JavaPlugin {
     public String getConfigValue(String key) {
         String ans = getConfig().getString(key);
         return ChatColor.translateAlternateColorCodes('&', ans);
-    }
-
-    // register permissions
-    public void registerPermissions() {
-        getServer().getPluginManager().addPermission(new Permission("cosmicvaults.vaults"));
-        getServer().getPluginManager().addPermission(new Permission("cosmicvaults.vaults.unlimited"));
     }
 }

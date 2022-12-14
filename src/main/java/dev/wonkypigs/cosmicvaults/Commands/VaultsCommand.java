@@ -46,7 +46,7 @@ public class VaultsCommand implements CommandExecutor {
             try {
                 // get vaults from database
                 PreparedStatement statement = plugin.getConnection()
-                        .prepareStatement("SELECT VAULT_ID FROM cosmicVaults_vaults WHERE UUID=? ORDER BY VAULT_ID ASC");
+                        .prepareStatement("SELECT VAULT_ID FROM player_vaults WHERE UUID=? ORDER BY VAULT_ID ASC");
                 statement.setString(1, player.getUniqueId().toString());
                 ResultSet results = statement.executeQuery();
                 int total_items = 0;

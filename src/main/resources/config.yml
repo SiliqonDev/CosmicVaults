@@ -23,8 +23,8 @@ vault-menu-title: "&dCosmic&5Vaults" # The title of the vault menu
 vault-item: "ENDER_CHEST" # Item used in vaults menu to represent a vault
 vault-item-name: "&b&lVault &7(&6{vault_number}&7)" # Name of the vault item
 
-vault-storage-rows: 3 # MAX: 6 | MIN: 1
-vault-storage-title: "&9&lVault &7(&9&l{vault_number}&7)" # Title of the vault storage page
+vault-storage-rows: 3 # MAX: 5 | MIN: 1
+# 1 row = 9 slots
 
 ##############################
 ########## DATABASE ##########
@@ -35,4 +35,4 @@ database:
   port: 3306
   username: username
   password: pass
-  database: db_name
+  database: cosmicvaults

@@ -27,17 +27,14 @@ public class VaultHandler implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 PreparedStatement statement = plugin.getConnection()
-                        .prepareStatement("SELECT CONTENTS FROM cosmicVaults_vaults WHERE UUID=? AND VAULT_ID=?");
+                        .prepareStatement("SELECT CONTENTS FROM player_vaults WHERE UUID=? AND VAULT_ID=?");
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setInt(2, id);
                 ResultSet result = statement.executeQuery();
 
                 // inventory
-                int slots = plugin.getConfig().getInt("vault-storage-rows")*9;
-                String title = plugin.getConfigValue("vault-storage-title")
-                        .replace("{vault_number}", String.valueOf(id))
-                        .replace("&", "§");
-                Inventory inv = plugin.getServer().createInventory(null, slots, title);
+                int slots = (plugin.getConfig().getInt("vault-storage-rows")+1)*9;
+                Inventory inv = plugin.getServer().createInventory(null, slots, "&5&lVault ".replace("&", "§") + id);
 
                 // filling up
                 if (result.next()) {
@@ -56,7 +53,8 @@ public class VaultHandler implements Listener {
                 ItemMeta backMeta = back.getItemMeta();
                 backMeta.setDisplayName("&c&lBack to menu".replace("&", "§"));
                 back.setItemMeta(backMeta);
-                inv.setItem(31, back);
+                // last row middle item
+                inv.setItem(slots-5, back);
 
                 Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(inv));
 
@@ -71,14 +69,14 @@ public class VaultHandler implements Listener {
             try {
                 // delete old items
                 PreparedStatement statement = plugin.getConnection()
-                        .prepareStatement("DELETE FROM cosmicVaults_vaults WHERE UUID=? AND VAULT_ID=?");
+                        .prepareStatement("DELETE FROM player_vaults WHERE UUID=? AND VAULT_ID=?");
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setInt(2, id);
                 statement.executeUpdate();
 
                 // save new items
                 statement = plugin.getConnection()
-                        .prepareStatement("INSERT INTO cosmicVaults_vaults (UUID, VAULT_ID, CONTENTS) VALUES (?, ?, ?)");
+                        .prepareStatement("INSERT INTO player_vaults (UUID, VAULT_ID, CONTENTS) VALUES (?, ?, ?)");
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setInt(2, id);
                 statement.setBlob(3, serializeItemsArray(inv.getContents()));
@@ -95,7 +93,7 @@ public class VaultHandler implements Listener {
             try {
                 // can player make more vaults
                 PreparedStatement statement = plugin.getConnection()
-                        .prepareStatement("SELECT VAULT_ID FROM cosmicVaults_vaults WHERE UUID=? ORDER BY VAULT_ID DESC LIMIT 1");
+                        .prepareStatement("SELECT VAULT_ID FROM player_vaults WHERE UUID=? ORDER BY VAULT_ID DESC LIMIT 1");
                 statement.setString(1, player.getUniqueId().toString());
                 ResultSet result = statement.executeQuery();
                 // if no vaults
@@ -111,11 +109,15 @@ public class VaultHandler implements Listener {
                 AtomicInteger maxVaults = new AtomicInteger();
                 maxVaults.set(Integer.parseInt(plugin.getConfig().getString("default-vaults")));
                 player.getEffectivePermissions().forEach((perm) -> {
-                    if (perm.getPermission().startsWith("cosmicvaults.vaults.")) {
-                        int vaultsPerm = Integer.parseInt(perm.getPermission().replace("cosmicvaults.vaults.", ""));
-                        if (vaultsPerm > maxVaults.get()) {
-                            maxVaults.set(vaultsPerm);
+                    if(!player.hasPermission("cosmicvaults.vaults.unlimited")) {
+                        if (perm.getPermission().startsWith("cosmicvaults.vaults.")) {
+                            int vaultsPerm = Integer.parseInt(perm.getPermission().replace("cosmicvaults.vaults.", ""));
+                            if (vaultsPerm > maxVaults.get()) {
+                                maxVaults.set(vaultsPerm);
+                            }
                         }
+                    } else {
+                        maxVaults.set(99999);
                     }
                 });
 
@@ -130,7 +132,7 @@ public class VaultHandler implements Listener {
 
                 // create new vault for player
                 statement = plugin.getConnection()
-                        .prepareStatement("INSERT INTO cosmicVaults_vaults (UUID, VAULT_ID, CONTENTS) VALUES (?, ?, ?)");
+                        .prepareStatement("INSERT INTO player_vaults (UUID, VAULT_ID, CONTENTS) VALUES (?, ?, ?)");
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setInt(2, vaults + 1);
                 Inventory vault = plugin.getServer().createInventory(null, 27, "");

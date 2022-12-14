@@ -1,7 +1,7 @@
 name: CosmicVaults
 version: 'v1.0'
 main: dev.wonkypigs.cosmicvaults.CosmicVaults
-api-version: 1.19
+api-version: 1.13
 prefix: CosmicVaults
 authors: [ WonkyPigs ]
 description: A plugin that handles private player vaults.

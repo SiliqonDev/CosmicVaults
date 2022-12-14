@@ -41,7 +41,7 @@ public class VaultHandler implements Listener {
 
                 // filling up
                 if (result.next()) {
-                    inv.setContents(deserializeItemsArray(result.getBlob("CONTENTS").getBinaryStream()));
+                    inv.setContents(deserializeItemsArray(result.getString("CONTENTS")));
                 }
                 result.close();
 
@@ -61,7 +61,7 @@ public class VaultHandler implements Listener {
 
                 Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(inv));
 
-            } catch (SQLException | IOException | ClassNotFoundException e) {
+            } catch (SQLException | IOException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -82,10 +82,11 @@ public class VaultHandler implements Listener {
                         .prepareStatement("INSERT INTO player_vaults (UUID, VAULT_ID, CONTENTS) VALUES (?, ?, ?)");
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setInt(2, id);
-                statement.setBlob(3, serializeItemsArray(inv.getContents()));
+                String contents = serializeItemsArray(inv.getContents());
+                statement.setString(3, contents);
                 statement.executeUpdate();
 
-            } catch (SQLException | IOException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -138,13 +139,13 @@ public class VaultHandler implements Listener {
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setInt(2, vaults + 1);
                 Inventory vault = plugin.getServer().createInventory(null, 27, "");
-                statement.setBlob(3, serializeItemsArray(vault.getContents()));
+                statement.setString(3, serializeItemsArray(vault.getContents()));
                 statement.executeUpdate();
 
                 // update vaultsmenu
                 VaultsCommand.vaultMenuFiller(page, player);
                 player.sendMessage("§aNew vault created! (ID: " + (vaults + 1) + ")");
-            } catch (SQLException | IOException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         });

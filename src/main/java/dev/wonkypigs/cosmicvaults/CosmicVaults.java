@@ -11,6 +11,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -80,16 +81,25 @@ public final class CosmicVaults extends JavaPlugin {
                     return;
                 }
 
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                // create database if not exists
-                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "?autoReconnect=true&useSSL=false", username, password));
-                getConnection().createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS " + database);
-                setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password));
-
-                getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_vaults (UUID varchar(50), VAULT_ID int, CONTENTS BLOB)").executeUpdate();
+                if (getConfig().getString("database.type").equalsIgnoreCase("sqlite")) {
+                    // create local database file and stuff
+                    Class.forName("org.sqlite.JDBC");
+                    File file = new File(getDataFolder(), "database.db");
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+                    setConnection(DriverManager.getConnection("jdbc:sqlite:" + file));
+                } else {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    // create database if not exists
+                    setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "?autoReconnect=true&useSSL=false", username, password));
+                    getConnection().createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS " + database);
+                    setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password));
+                }
+                getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_vaults (UUID varchar(50), VAULT_ID int, CONTENTS TEXT)").executeUpdate();
                 getLogger().info("Successfully connected to the MySQL database");
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException | IOException e) {
             getLogger().info("Error connecting to the MySQL database");
             e.printStackTrace();
         }

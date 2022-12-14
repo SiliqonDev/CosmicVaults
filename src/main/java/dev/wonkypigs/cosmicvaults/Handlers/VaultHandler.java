@@ -33,7 +33,10 @@ public class VaultHandler implements Listener {
                 ResultSet result = statement.executeQuery();
 
                 // inventory
-                int slots = (plugin.getConfig().getInt("vault-storage-rows")+1)*9;
+                int slots = (plugin.getConfig().getInt("settings.vault-storage-rows")+1)*9;
+                if (slots > 54) {
+                    slots = 54;
+                }
                 Inventory inv = plugin.getServer().createInventory(null, slots, "&5&lVault ".replace("&", "§") + id);
 
                 // filling up
@@ -107,7 +110,7 @@ public class VaultHandler implements Listener {
 
                 // get player's effective perms
                 AtomicInteger maxVaults = new AtomicInteger();
-                maxVaults.set(Integer.parseInt(plugin.getConfig().getString("default-vaults")));
+                maxVaults.set(Integer.parseInt(plugin.getConfig().getString("settings.default-vaults")));
                 player.getEffectivePermissions().forEach((perm) -> {
                     if(!player.hasPermission("cosmicvaults.vaults.unlimited")) {
                         if (perm.getPermission().startsWith("cosmicvaults.vaults.")) {
@@ -123,8 +126,7 @@ public class VaultHandler implements Listener {
 
                 // max vaults and no cosmicvaults.vaults.unlimited perm?
                 if ((vaults >= maxVaults.get()) && (!player.hasPermission("cosmicvaults.vaults.unlimited"))) {
-                    player.sendMessage(plugin.getConfigValue("max-vaults-reached")
-                            .replace("{vaults}", String.valueOf(maxVaults.get()))
+                    player.sendMessage(plugin.getConfigValue("messages.max-vaults-reached")
                             .replace("{prefix}", plugin.getConfigValue("prefix"))
                             .replace("&", "§"));
                     return;

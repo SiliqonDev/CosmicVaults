@@ -2,7 +2,9 @@ package dev.wonkypigs.cosmicvaults;
 
 import dev.wonkypigs.cosmicvaults.Commands.VaultsCommand;
 import dev.wonkypigs.cosmicvaults.Handlers.VaultHandler;
+import dev.wonkypigs.cosmicvaults.Listener.UpdateChecker;
 import dev.wonkypigs.cosmicvaults.Listener.VaultMenuListener;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.Permission;
@@ -28,6 +30,14 @@ public final class CosmicVaults extends JavaPlugin {
         registerListeners();
         registerPermissions();
         mySqlSetup();
+
+        int pluginId = 17072; // <-- Replace with the id of your plugin!
+        Metrics metrics = new Metrics(this, pluginId);
+
+        UpdateChecker updateChecker = new UpdateChecker();
+        updateChecker.check();
+        getServer().getPluginManager().registerEvents(updateChecker, this);
+
         getLogger().info("CosmicVaults has been enabled successfully!");
     }
 

@@ -18,7 +18,7 @@ public class VaultMenuListener implements Listener {
 
     @EventHandler
     public void onMenuClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().contains(plugin.getConfigValue("vault-menu-title").replace("&", "§"))) {
+        if (e.getView().getTitle().contains(plugin.getConfigValue("settings.vault-menu-title").replace("&", "§"))) {
             e.setCancelled(true);
             if (e.getCurrentItem() != null) {
                 String title = e.getView().getTitle();
@@ -36,7 +36,7 @@ public class VaultMenuListener implements Listener {
                 else if (e.getCurrentItem().getType() == Material.DIAMOND) {
                     VaultHandler.createNewVault(player, currpage);
                 }
-                else if (e.getCurrentItem().getType() == Material.getMaterial(plugin.getConfigValue("vault-item"))) {
+                else if (e.getCurrentItem().getType() == Material.getMaterial(plugin.getConfigValue("settings.vault-item"))) {
                     currpage--;
                     VaultHandler.openVault(player, (e.getSlot()-8) + currpage*27);
                 }

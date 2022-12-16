@@ -31,7 +31,7 @@ public class UpdateChecker implements Listener {
 
     @EventHandler
     public void on(PlayerJoinEvent event) {
-        if(plugin.getConfig().getBoolean("update-checker")) {
+        if(plugin.getConfig().getBoolean("settings.check-for-updates")) {
             if (event.getPlayer().isOp()) {
                 if (isAvailable()) {
                     event.getPlayer().sendMessage("&cThere is a new update available for CosmicVaults!\n&cCurrent version: " + plugin.getDescription().getVersion() + "\n&cNew version: " + remoteVersion);

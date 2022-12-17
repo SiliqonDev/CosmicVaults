@@ -6,7 +6,7 @@
 
     <groupId>dev.wonkypigs</groupId>
     <artifactId>CosmicVaults</artifactId>
-    <version>v1.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>CosmicVaults</name>

@@ -25,19 +25,24 @@ public class UpdateChecker implements Listener {
 
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
     @EventHandler
     public void on(PlayerJoinEvent event) {
-        if(plugin.getConfig().getBoolean("settings.check-for-updates")) {
-            if (event.getPlayer().isOp()) {
-                if (isAvailable()) {
-                    event.getPlayer().sendMessage("&cThere is a new update available for CosmicVaults!\n&cCurrent version: " + plugin.getDescription().getVersion() + "\n&cNew version: " + remoteVersion);
-                }
+        if(!plugin.getConfig().getBoolean("settings.check-for-updates")) {
+            return;
+        }
+        if (event.getPlayer().isOp()) {
+            check();
+            if (isAvailable) {
+                event.getPlayer().sendMessage("&a&m---------------------------------".replace("&", "§"));
+                event.getPlayer().sendMessage("&b&lThere is a new update available for CosmicVaults!\n&c&lCurrent version: &d{current}\n&a&lNew version: &d{new}\n&a&lDownload Here: &a{link}"
+                        .replace("{current}", plugin.getDescription().getVersion())
+                        .replace("{new}", remoteVersion)
+                        .replace("{link}", "www.spigotmc.org/resources/106729")
+                        .replace("&", "§"));
+                event.getPlayer().sendMessage("&a&m---------------------------------".replace("&", "§"));
             }
         }
+
     }
 
     public void check() {

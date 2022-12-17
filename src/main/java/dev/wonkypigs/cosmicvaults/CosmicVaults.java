@@ -37,7 +37,6 @@ public final class CosmicVaults extends JavaPlugin {
 
         UpdateChecker updateChecker = new UpdateChecker();
         updateChecker.check();
-        getServer().getPluginManager().registerEvents(updateChecker, this);
 
         getLogger().info("CosmicVaults has been enabled successfully!");
     }

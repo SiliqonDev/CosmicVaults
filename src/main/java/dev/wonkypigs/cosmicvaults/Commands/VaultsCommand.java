@@ -23,7 +23,13 @@ public class VaultsCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (player.hasPermission("cosmicvaults.vaults")) {
+            if (args.length == 1 && args[0].equalsIgnoreCase("reload") && player.hasPermission("cosmicvaults.reload")) {
+                plugin.reloadConfig();
+                plugin.mySqlSetup();
+                plugin.getLogger().info("Plugin reloaded successfully!");
+                player.sendMessage(plugin.getConfigValue("messages.reload-message"));
+            }
+            else if (player.hasPermission("cosmicvaults.vaults")) {
                 // Open main vaults menu
                 vaultMenuFiller(1, player);
             } else {

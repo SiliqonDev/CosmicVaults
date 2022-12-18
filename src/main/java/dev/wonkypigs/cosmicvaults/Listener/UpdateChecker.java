@@ -21,10 +21,6 @@ public class UpdateChecker implements Listener {
     private boolean isAvailable;
     private String remoteVersion;
 
-    public UpdateChecker() {
-
-    }
-
     @EventHandler
     public void on(PlayerJoinEvent event) {
         if(!plugin.getConfig().getBoolean("settings.check-for-updates")) {
@@ -50,7 +46,6 @@ public class UpdateChecker implements Listener {
     }
 
     private boolean checkUpdate() {
-        plugin.getLogger().info("Checking for updates...");
         try {
             String localVersion = CosmicVaults.getInstance().getDescription().getVersion();
             HttpsURLConnection connection = (HttpsURLConnection) new URL(url + id).openConnection();

@@ -7,8 +7,11 @@ prefix: "&7[&dCosmic&5Vaults&7]&r"
 messages:
   no-permission: "{prefix} &cYou do not have permission to use this command." # player does not have permissions to use command
   must-be-player: "{prefix} &cYou must be a player to use this command." # command must be used by a player
+
   no-vaults-item: "&cYou do not have any vaults." # Player has no vaults
   max-vaults-reached: "{prefix} &cYou cannot create any more vaults." # Player has max vaults
+
+  reload-message: "{prefix} &aSuccessfully reloaded the plugin." # Plugin reloaded
 
 ##############################
 ####### VAULT SETTINGS #######

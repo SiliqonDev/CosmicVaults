@@ -9,4 +9,4 @@ commands:
   vaults:
     description: View your vaults
     usage: /vaults
-    aliases: [vaultsmenu, v]
+    aliases: [vaultsmenu, v, cosmicvaults]

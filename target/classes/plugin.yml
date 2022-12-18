@@ -1,5 +1,5 @@
 name: CosmicVaults
-version: '1.0.1'
+version: '1.0.3'
 main: dev.wonkypigs.cosmicvaults.CosmicVaults
 api-version: 1.13
 prefix: CosmicVaults
@@ -9,4 +9,4 @@ commands:
   vaults:
     description: View your vaults
     usage: /vaults
-    aliases: [vaultsmenu, v]
+    aliases: [vaultsmenu, v, cosmicvaults]

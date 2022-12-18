@@ -1,5 +1,6 @@
 package dev.wonkypigs.cosmicvaults;
 
+import com.tchristofferson.configupdater.ConfigUpdater;
 import dev.wonkypigs.cosmicvaults.Commands.VaultsCommand;
 import dev.wonkypigs.cosmicvaults.Handlers.VaultHandler;
 import dev.wonkypigs.cosmicvaults.Listener.UpdateChecker;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public final class CosmicVaults extends JavaPlugin {
     private static CosmicVaults instance;{ instance = this; }
@@ -27,6 +29,29 @@ public final class CosmicVaults extends JavaPlugin {
         // Plugin startup logic
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
+
+        // if config version is old, update it to current version
+        File configFile = new File(getDataFolder(), "config.yml");
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+
+        if (config.getDouble("config-version") != 1.0) {
+            config.set("config-version", 1.0);
+            try {
+                ConfigUpdater.update(this, "config.yml", configFile, Arrays.asList("none"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // save changes
+            try {
+                config.save(configFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            // reload config
+            reloadConfig();
+            getLogger().info("Updated config file to latest version");
+        }
+
         registerCommands();
         registerListeners();
         registerPermissions();

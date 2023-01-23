@@ -4,7 +4,7 @@
   <groupId>dev.wonkypigs</groupId>
   <artifactId>CosmicVaults</artifactId>
   <name>CosmicVaults</name>
-  <version>1.0.3</version>
+  <version>1.1</version>
   <description>A simple plugin that allows players to make private vaults</description>
   <url>wonkypigs.dev</url>
   <build>
@@ -53,10 +53,6 @@
     <repository>
       <id>sonatype</id>
       <url>https://oss.sonatype.org/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>maven-central</id>
-      <url>https://oss.sonatype.org/content/groups/public</url>
     </repository>
   </repositories>
   <dependencies>

@@ -2,48 +2,48 @@
 ########## MESSAGES ##########
 ##############################
 
-prefix: "&7[&dCosmic&5Vaults&7]&r"
+prefix: "&7[&dCosmic&5Vaults&7]&r "
 
-messages:
-  no-permission: "{prefix} &cYou do not have permission to use this command." # player does not have permissions to use command
-  must-be-player: "{prefix} &cYou must be a player to use this command." # command must be used by a player
+no-permission-message: "{prefix}&cYou do not have permission to use this command." # player does not have permissions to use command
+must-be-player-message: "{prefix}&cYou must be a player to use this command." # command must be used by a player
 
-  no-vaults-item: "&cYou do not have any vaults." # Player has no vaults
-  max-vaults-reached: "{prefix} &cYou cannot create any more vaults." # Player has max vaults
+no-vaults-item: "&cYou do not have any vaults." # Player has no vaults
+max-vaults-reached-message: "{prefix}&cYou cannot create any more vaults." # Player has max vaults
 
-  reload-message: "{prefix} &aSuccessfully reloaded the plugin." # Plugin reloaded
+reload-message: "{prefix}&aSuccessfully reloaded the plugin." # Plugin reloaded
 
 ##############################
 ####### VAULT SETTINGS #######
 ##############################
 
-settings:
-  default-vaults: 1 # The amount of vaults a player will have by default
-  # Players with permission cosmicvaults.vaults.{number} will have {number} vaults
-  # Players with permission cosmicvaults.vaults.unlimited will have unlimited vaults
+default-vaults: 1 # The amount of vaults a player will have by default
+# Players with permission cosmicvaults.vaults.{number} will have {number} vaults
+# Players with permission cosmicvaults.vaults.unlimited will have unlimited vaults
 
-  vault-menu-title: "&dCosmic&5Vaults" # The title of the main vault menu
+vault-menu-title: "&dCosmic&5Vaults" # The title of the main vault menu
 
-  vault-item: "ENDER_CHEST" # Item used in vaults menu to represent a vault
-  vault-item-name: "&b&lVault &7(&6{vault_number}&7)" # Name of the vault item
+vault-item: "ENDER_CHEST" # Item used in vaults menu to represent a vault
+vault-item-name: "&b&lVault &7(&6{vault_number}&7)" # Name of the vault item
 
-  vault-storage-rows: 3 # MAX: 5 | MIN: 1
-  # 1 row = 9 slots
+vault-storage-rows: 3 # MAX: 5 | MIN: 1
+# 1 row = 9 slots
 
-  check-for-updates: true # Check for plugin updates on startup
+check-for-updates: true # Check for plugin updates on startup
 
 ##############################
 ########## DATABASE ##########
 ##############################
 
-database:
-  type: "sqlite" # sqlite OR mysql
-  # 'sqlite' will store all data in a local .db file
-  # 'mysql' will attempt to connect to your mysql database with the given credentials
+database-type: "sqlite" # sqlite OR mysql
+# 'sqlite' will store all data in a local .db file
+# 'mysql' will attempt to connect to your mysql database with the given credentials
 
-  # required for mysql:
-  host: 127.0.0.1
-  port: 3306
-  username: username
-  password: pass
-  database: cosmicvaults
+# required for mysql:
+database-host: 127.0.0.1
+database-port: 3306
+database-username: username
+database-password: pass
+database-database: cosmicvaults
+
+# DO NOT CHANGE THIS OR ELSE THE CONFIG WILL BREAK
+config-version: 1.1

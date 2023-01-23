@@ -1,0 +1,15 @@
+stringlists:
+
+ignored:
+  - "^config-version$"
+
+doublequotes:
+  - "(.*)-message$"
+  - "^prefix$"
+  - "^no-vaults-item$"
+  - "^vault-menu-title$"
+  - "^vault-item-name$"
+  - "^vault-item$"
+  - "^database-type$"
+
+escape-newlines:

@@ -1,6 +1,7 @@
 dev\wonkypigs\cosmicvaults\Handlers\VaultHandler.class
 dev\wonkypigs\cosmicvaults\Helper\VaultSaveHelper.class
 dev\wonkypigs\cosmicvaults\Listener\UpdateChecker.class
+dev\wonkypigs\cosmicvaults\ConfigUpdater.class
 dev\wonkypigs\cosmicvaults\Listener\VaultMenuListener.class
 dev\wonkypigs\cosmicvaults\Commands\VaultsCommand.class
 dev\wonkypigs\cosmicvaults\CosmicVaults.class

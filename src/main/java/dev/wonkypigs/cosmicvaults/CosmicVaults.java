@@ -1,6 +1,5 @@
 package dev.wonkypigs.cosmicvaults;
 
-import com.tchristofferson.configupdater.ConfigUpdater;
 import dev.wonkypigs.cosmicvaults.Commands.VaultsCommand;
 import dev.wonkypigs.cosmicvaults.Handlers.VaultHandler;
 import dev.wonkypigs.cosmicvaults.Listener.UpdateChecker;
@@ -16,11 +15,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public final class CosmicVaults extends JavaPlugin {
     private static CosmicVaults instance;{ instance = this; }
     private Connection connection;
+    public double confVersion =  1.1;
     public String host, database, username, password;
     public int port;
 
@@ -31,26 +30,7 @@ public final class CosmicVaults extends JavaPlugin {
         saveDefaultConfig();
 
         // if config version is old, update it to current version
-        File configFile = new File(getDataFolder(), "config.yml");
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-
-        if (config.getDouble("config-version") != 1.0) {
-            config.set("config-version", 1.0);
-            try {
-                ConfigUpdater.update(this, "config.yml", configFile, Arrays.asList("none"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // save changes
-            try {
-                config.save(configFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            // reload config
-            reloadConfig();
-            getLogger().info("Updated config file to latest version");
-        }
+        updateConfig();
 
         registerCommands();
         registerListeners();
@@ -87,14 +67,49 @@ public final class CosmicVaults extends JavaPlugin {
         getServer().getPluginManager().addPermission(new Permission("cosmicvaults.vaults.unlimited"));
     }
 
+    public void updateConfig() {
+
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+
+        if (config.getDouble("config-version") <= 1.0) {
+            // rename config.yml to old-config.yml
+            File oldConfig = new File(getDataFolder(), "old-config.yml");
+            File configFile = new File(getDataFolder(), "config.yml");
+            configFile.renameTo(oldConfig);
+
+            // create new config.yml
+            saveDefaultConfig();
+            getConfig().set("config-version", confVersion);
+            getLogger().severe("==========================");
+            getLogger().info("You were using an old format of");
+            getLogger().info("the config.yml file. It has been");
+            getLogger().info("updated to the current version.");
+            getLogger().info("Make sure to update all values!");
+            getLogger().severe("==========================");
+            return;
+        }
+
+        config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+
+        if (config.getDouble("config-version") != confVersion) {
+            try {
+                new ConfigUpdater(this, "config.yml", "config-updater.yml").update();
+            } catch (IOException e) {
+                getLogger().severe("Could not update config.yml!");
+                e.printStackTrace();
+            }
+        }
+        reloadConfig();
+    }
+
     public void mySqlSetup() {
         try {
             File file = new File(getDataFolder(), "config.yml");
-            host = YamlConfiguration.loadConfiguration(file).getString("database.host");
-            port = YamlConfiguration.loadConfiguration(file).getInt("database.port");
-            database = YamlConfiguration.loadConfiguration(file).getString("database.database");
-            username = YamlConfiguration.loadConfiguration(file).getString("database.username");
-            password = YamlConfiguration.loadConfiguration(file).getString("database.password");
+            host = YamlConfiguration.loadConfiguration(file).getString("database-host");
+            port = YamlConfiguration.loadConfiguration(file).getInt("database-port");
+            database = YamlConfiguration.loadConfiguration(file).getString("database-database");
+            username = YamlConfiguration.loadConfiguration(file).getString("database-username");
+            password = YamlConfiguration.loadConfiguration(file).getString("database-password");
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +121,7 @@ public final class CosmicVaults extends JavaPlugin {
                     return;
                 }
 
-                if (getConfig().getString("database.type").equalsIgnoreCase("sqlite")) {
+                if (getConfig().getString("database-type").equalsIgnoreCase("sqlite")) {
                     // create local database file and stuff
                     Class.forName("org.sqlite.JDBC");
                     File file = new File(getDataFolder(), "database.db");

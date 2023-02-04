@@ -18,11 +18,11 @@ public class VaultMenuListener implements Listener {
 
     @EventHandler
     public void onMenuClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().contains(plugin.getConfigValue("settings.vault-menu-title").replace("&", "§"))) {
+        if (e.getView().getTitle().contains(plugin.getConfigValue("vault-menu-title").replace("&", "§"))) {
             e.setCancelled(true);
+            String title = e.getView().getTitle();
+            int currpage = Integer.parseInt(title.substring(title.indexOf("Page ") + 5));
             if (e.getCurrentItem() != null) {
-                String title = e.getView().getTitle();
-                int currpage = Integer.parseInt(title.substring(title.indexOf("Page ") + 5));
                 Player player = (Player) e.getWhoClicked();
 
                 if (e.getCurrentItem().getType() == Material.GREEN_WOOL) {
@@ -36,18 +36,30 @@ public class VaultMenuListener implements Listener {
                 else if (e.getCurrentItem().getType() == Material.DIAMOND) {
                     VaultHandler.createNewVault(player, currpage);
                 }
-                else if (e.getCurrentItem().getType() == Material.getMaterial(plugin.getConfigValue("settings.vault-item"))) {
+                else if (e.getCurrentItem().getType() == Material.getMaterial(plugin.getConfigValue("vault-item"))) {
                     currpage--;
                     VaultHandler.openVault(player, (e.getSlot()-8) + currpage*27);
                 }
             }
         }
         else if (e.getView().getTitle().contains("Vault ")) {
+            String title = e.getView().getTitle();
+            int currvault = Integer.parseInt(title.substring(title.indexOf("Vault ") + 6));
+            plugin.getLogger().info(""+currvault);
             if (e.getCurrentItem() != null) {
                 Player player = (Player) e.getWhoClicked();
                 if (e.getCurrentItem().getType() == Material.BARRIER) {
                     e.setCancelled(true);
                     VaultsCommand.vaultMenuFiller(1, player);
+                    e.setCancelled(true);
+                } else if (e.getCurrentItem().getType() == Material.GREEN_WOOL) {
+                    currvault++;
+                    VaultHandler.openVault(player, currvault);
+                    e.setCancelled(true);
+                } else if (e.getCurrentItem().getType() == Material.RED_WOOL) {
+                    currvault--;
+                    VaultHandler.openVault(player, currvault);
+                    e.setCancelled(true);
                 } else if (e.getCurrentItem().getType() == Material.GRAY_STAINED_GLASS_PANE) {
                     e.setCancelled(true);
                 }

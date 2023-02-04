@@ -32,8 +32,17 @@ public class VaultHandler implements Listener {
                 statement.setInt(2, id);
                 ResultSet result = statement.executeQuery();
 
+                PreparedStatement statement2 = plugin.getConnection()
+                        .prepareStatement("SELECT VAULT_ID FROM player_vaults WHERE UUID=? ORDER BY VAULT_ID ASC");
+                statement2.setString(1, player.getUniqueId().toString());
+                ResultSet results2 = statement2.executeQuery();
+                int total_items = 0;
+                while (results2.next()) {
+                    total_items++;
+                }
+
                 // inventory
-                int slots = (plugin.getConfig().getInt("settings.vault-storage-rows")+1)*9;
+                int slots = (plugin.getConfig().getInt("vault-storage-rows")+1)*9;
                 if (slots > 54) {
                     slots = 54;
                 }
@@ -56,8 +65,23 @@ public class VaultHandler implements Listener {
                 ItemMeta backMeta = back.getItemMeta();
                 backMeta.setDisplayName("&c&lBack to menu".replace("&", "§"));
                 back.setItemMeta(backMeta);
-                // last row middle item
                 inv.setItem(slots-5, back);
+
+                if (id != total_items) {
+                    ItemStack next = new ItemStack(Material.GREEN_WOOL);
+                    ItemMeta nextMeta = next.getItemMeta();
+                    nextMeta.setDisplayName("&a&lNext Vault".replace("&", "§"));
+                    next.setItemMeta(nextMeta);
+                    inv.setItem(slots-3, next);
+                }
+
+                if (id != 1) {
+                    ItemStack prev = new ItemStack(Material.RED_WOOL);
+                    ItemMeta prevMeta = prev.getItemMeta();
+                    prevMeta.setDisplayName("&c&lPrevious Vault".replace("&", "§"));
+                    prev.setItemMeta(prevMeta);
+                    inv.setItem(slots-7, prev);
+                }
 
                 Bukkit.getScheduler().runTask(plugin, () -> player.openInventory(inv));
 
@@ -111,7 +135,7 @@ public class VaultHandler implements Listener {
 
                 // get player's effective perms
                 AtomicInteger maxVaults = new AtomicInteger();
-                maxVaults.set(Integer.parseInt(plugin.getConfig().getString("settings.default-vaults")));
+                maxVaults.set(Integer.parseInt(plugin.getConfig().getString("default-vaults")));
                 player.getEffectivePermissions().forEach((perm) -> {
                     if(!player.hasPermission("cosmicvaults.vaults.unlimited")) {
                         if (perm.getPermission().startsWith("cosmicvaults.vaults.")) {
@@ -127,7 +151,7 @@ public class VaultHandler implements Listener {
 
                 // max vaults and no cosmicvaults.vaults.unlimited perm?
                 if ((vaults >= maxVaults.get()) && (!player.hasPermission("cosmicvaults.vaults.unlimited"))) {
-                    player.sendMessage(plugin.getConfigValue("messages.max-vaults-reached")
+                    player.sendMessage(plugin.getConfigValue("max-vaults-reached")
                             .replace("{prefix}", plugin.getConfigValue("prefix"))
                             .replace("&", "§"));
                     return;
